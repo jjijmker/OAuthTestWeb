@@ -6,14 +6,17 @@ public class ConfigConstants {
 	public static final String FILE_PATH_CONFIG_PROPS = "/config.properties";
 
 	// Property Names
-	public static final String PROP_NAME_POSTFIX_NAME = ".name";
-	public static final String PROP_NAME_POSTFIX_CLIENT_KEY = ".client.key";
-	public static final String PROP_NAME_POSTFIX_CLIENT_SECRET = ".client.secret";
-	public static final String PROP_NAME_POSTFIX_URL_OAUTH1_AUTHORIZATION = ".url.oauth1.authorization";
-	public static final String PROP_NAME_POSTFIX_URL_OAUTH1_REQUEST_TOKEN = ".url.oauth1.requesttoken";
-	public static final String PROP_NAME_POSTFIX_URL_OAUTH1_ACCESS_TOKEN = ".url.oauth1.accesstoken";
-	public static final String PROP_NAME_POSTFIX_URL_OAUTH2_AUTHORIZATION = ".url.oauth2.authorization";
-	public static final String PROP_NAME_POSTFIX_URL_OAUTH2_ACCESS_TOKEN = ".url.oauth2.accesstoken";
-	public static final String PROP_NAME_POSTFIX_URL_RESOURCES = ".url.resources";
-	public static final String PROP_NAME_POSTFIX_SUPPORT = ".supported.actions";
+	public static final String PROP_NAME_NAME = "name";
+	public static final String PROP_NAME_URL = "url";
+	public static final String PROP_NAME_CLIENT_KEY = "client-key";
+	public static final String PROP_NAME_CLIENT_SECRET = "client-secret";
+	public static final String PROP_NAME_OAUTH1_URL_AUTHORIZATION = "oauth1.url.authorization";
+	public static final String PROP_NAME_OAUTH1_URL_REQUEST_TOKEN = "oauth1.url.request-token";
+	public static final String PROP_NAME_OAUTH1_URL_ACCESS_TOKEN = "oauth1.url.access-token";
+	public static final String PROP_NAME_OAUTH2_URL_AUTHORIZATION = "oauth2.url.authorization";
+	public static final String PROP_NAME_OAUTH2_URL_ACCESS_TOKEN = "oauth2.url.access-token";
+	public static final String PROP_NAME_OAUTH_SUPPORT = "oauth-support";
+	public static final String PROP_NAME_REQUIRED_SCOPES = "required-scopes";
+	
+	public static final String PROP_KEYWORD_RESOURCE = "resource";
 }

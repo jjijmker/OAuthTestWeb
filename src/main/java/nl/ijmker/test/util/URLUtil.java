@@ -5,7 +5,6 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 
 import nl.ijmker.test.constant.ActionConstants;
-import nl.ijmker.test.constant.PageConstants;
 
 public class URLUtil {
 
@@ -25,6 +24,16 @@ public class URLUtil {
 	/**
 	 * @param request
 	 * @param page
+	 * @return
+	 */
+	public static String getExternalJSPPath(HttpServletRequest request, String page) {
+		return getExternalJSPPath(request, page, false);
+	}
+
+	/**
+	 * @param request
+	 * @param page
+	 * @param copyParams
 	 * @return
 	 */
 	public static String getExternalJSPPath(HttpServletRequest request, String page, boolean copyParams) {
@@ -48,16 +57,6 @@ public class URLUtil {
 		}
 
 		return pathBuilder.toString();
-	}
-
-	/**
-	 * @param request
-	 * @param page
-	 * @return
-	 */
-	public static String getInternalErrorJSPPath(HttpServletRequest request, String errorCode) {
-
-		return getInternalJSPPath(request, PageConstants.PAGE_ERROR + "?errorCode=" + errorCode);
 	}
 
 	/**
@@ -91,6 +90,20 @@ public class URLUtil {
 	/**
 	 * @param request
 	 * @param server
+	 * @param resource
+	 * @param action
+	 * @return
+	 */
+	public static String getInternalActionPath(HttpServletRequest request, String server, String resource,
+			String action) {
+
+		return ActionConstants.ACTION_PREFIX + server + ActionConstants.ACTION_SEP + resource
+				+ ActionConstants.ACTION_SEP + action;
+	}
+
+	/**
+	 * @param request
+	 * @param server
 	 * @param action
 	 * @return
 	 */
@@ -117,10 +130,10 @@ public class URLUtil {
 	 * @param request
 	 * @return
 	 */
-	public static String getOAuth2CallbackURL(HttpServletRequest request, String serverType) {
+	public static String getCallbackURL(HttpServletRequest request, String serverType) {
 
 		// Determine callback path
-		String callbackPath = getExternalActionPath(request, serverType, ActionConstants.ACTION_OAUTH2_CALLBACK);
+		String callbackPath = getExternalActionPath(request, ActionConstants.ACTION_PROCESS_CALLBACK);
 
 		// Create absolute URL
 		return getAbsoluteURL(request, callbackPath);

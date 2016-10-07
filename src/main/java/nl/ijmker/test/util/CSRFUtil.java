@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import nl.ijmker.test.constant.AlgoConstants;
-import nl.ijmker.test.error.CSRFException;
 
 public class CSRFUtil {
 
@@ -26,27 +25,12 @@ public class CSRFUtil {
 	 * @param request
 	 * @param receivedToken
 	 */
-	public static void checkCSRFToken(HttpServletRequest request, String receivedToken) {
+	public static boolean checkCSRFToken(HttpServletRequest request, String receivedToken) {
 
 		VarUtil.checkRequired(receivedToken);
 
 		String storedToken = SessionAttrUtil.getCSRFToken(request);
 
-		if (!receivedToken.equals(storedToken)) {
-			throw new CSRFException(receivedToken, storedToken);
-		}
-	}
-
-	/**
-	 * @param request
-	 * @param receivedToken
-	 */
-	public static String renewCSRFToken(HttpServletRequest request, String receivedToken) {
-
-		// First check the received token
-		checkCSRFToken(request, receivedToken);
-
-		// If all good, return a new one
-		return getCSRFToken(request);
+		return receivedToken.equals(storedToken);
 	}
 }

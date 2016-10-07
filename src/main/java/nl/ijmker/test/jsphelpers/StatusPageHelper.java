@@ -10,6 +10,7 @@ import com.github.scribejava.core.model.OAuth2AccessToken;
 
 import nl.ijmker.test.util.ConfigUtil;
 import nl.ijmker.test.util.SessionAttrUtil;
+import nl.ijmker.test.util.URLUtil;
 
 public class StatusPageHelper {
 
@@ -17,12 +18,12 @@ public class StatusPageHelper {
 	 * @param request
 	 * @return
 	 */
-	public static String getServerType(HttpServletRequest request) {
+	public static String getServer(HttpServletRequest request) {
 
-		String serverType = SessionAttrUtil.getServerType(request);
+		String server = SessionAttrUtil.getServer(request);
 
-		if (serverType != null) {
-			return serverType;
+		if (server != null) {
+			return server;
 		} else {
 			return "NA";
 		}
@@ -32,12 +33,12 @@ public class StatusPageHelper {
 	 * @param request
 	 * @return
 	 */
-	public static String getServerTypeName(HttpServletRequest request) {
+	public static String getServerName(HttpServletRequest request) {
 
-		String serverType = SessionAttrUtil.getServerType(request);
+		String server = SessionAttrUtil.getServer(request);
 
-		if (serverType != null) {
-			return ConfigUtil.getName(serverType);
+		if (server != null) {
+			return ConfigUtil.getName(server);
 		} else {
 			return "NA";
 		}
@@ -127,5 +128,29 @@ public class StatusPageHelper {
 		}
 
 		return "NA";
+	}
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	public static String getResourceName(HttpServletRequest request) {
+
+		String server = SessionAttrUtil.getServer(request);
+		String resource = SessionAttrUtil.getResource(request);
+
+		return ConfigUtil.getResourceName(server, resource);
+	}
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	public static String getResourceURL(HttpServletRequest request) {
+
+		String server = SessionAttrUtil.getServer(request);
+		String resource = SessionAttrUtil.getResource(request);
+
+		return URLUtil.getInternalActionPath(request, server, resource);
 	}
 }

@@ -14,19 +14,75 @@
 	<jsp:param name="title" value="${title}" />
 </jsp:include>
 
-<p>
-<c:choose>
-	<c:when test="${errorCode == ErrorConstants.ERROR_INVALID_ACTION_PATH}">
-		Invalid action path
-    </c:when>
-	<c:when test="${errorCode == 200}">
-		Lalalala
-	</c:when>
-	<c:otherwise>
-		Unknown Error
-	</c:otherwise>
-</c:choose>
-</p>
+<h3>Details</h3>
+
+<table>
+	<tr>
+		<th>
+			Status:
+		</th>
+		<td>
+			<c:choose>
+				<c:when test="${not empty requestScope[AttrConstants.ERROR_STATUS_CODE]}">
+					<c:out value="${requestScope[AttrConstants.ERROR_STATUS_CODE]}" />
+				</c:when>
+				<c:otherwise>
+					200
+				</c:otherwise>
+			</c:choose>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			Code:
+		</th>
+		<td>
+			<c:choose>
+				<c:when test="${not empty requestScope[AttrConstants.ERROR_EXCEPTION]}">
+					<c:out value="${ErrorConstants.ERROR_EXCEPTION}" />
+				</c:when>
+				<c:otherwise>
+					<c:out value="${sessionScope[AttrConstants.ATTR_ERROR]}" />
+				</c:otherwise>
+			</c:choose>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			Description:
+		</th>
+		<td>
+			<c:choose>
+				<c:when test="${not empty requestScope[AttrConstants.ERROR_EXCEPTION]}">
+					<c:out value="${requestScope[AttrConstants.ERROR_MESSAGE]}" />
+				</c:when>
+				<c:otherwise>
+					<c:out value="${sessionScope[AttrConstants.ATTR_ERROR_DESCRIPTION]}" />
+				</c:otherwise>
+			</c:choose>
+		</td>
+	</tr>
+	<c:if test="${not empty sessionScope[AttrConstants.ATTR_ERROR_URI]}">
+		<tr>
+			<th>
+				URI:
+			</th>
+			<td>
+				<c:out value="${sessionScope[AttrConstants.ATTR_ERROR_URI]}" />
+			</td>
+		</tr>
+	</c:if>
+	<c:if test="${not empty requestScope[AttrConstants.ERROR_EXCEPTION]}">
+		<tr>
+			<th>
+				Exception:
+			</th>
+			<td>
+				<c:out value="${requestScope[AttrConstants.ERROR_EXCEPTION]}" />
+			</td>
+		</tr>
+	</c:if>
+</table>
 
 </body>
 </html>

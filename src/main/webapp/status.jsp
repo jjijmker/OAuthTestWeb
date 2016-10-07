@@ -22,10 +22,10 @@
 <table>
 	<tr>
 		<th>
-			Server Type:
+			Server:
 		</th>
 		<td>
-			<c:out value="${StatusPageHelper.getServerTypeName(pageContext.request)}" />
+			<c:out value="${StatusPageHelper.getServerName(pageContext.request)}" />
 		</td>
 	</tr>
 </table>
@@ -77,9 +77,20 @@
 	</tr>
 </table>
 
-<h3><c:out value="${StatusPageHelper.getServerTypeName(pageContext.request)}" /> Actions</h3>
+<h3><c:out value="${StatusPageHelper.getServerName(pageContext.request)}" /> Actions</h3>
 
-<jsp:include page="/${StatusPageHelper.getServerType(pageContext.request)}/actions.jsp" />
+<table>
+	<tr>
+		<th>
+			Action
+		</th>
+		<td>
+			<a href="<c:out value="${StatusPageHelper.getResourceURL(pageContext.request)}" />">
+				<c:out value="${StatusPageHelper.getResourceName(pageContext.request)}" />
+			</a>
+		</td>
+	</tr>
+</table>
 
 </body>
 </html>

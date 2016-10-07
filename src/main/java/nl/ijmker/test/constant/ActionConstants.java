@@ -6,14 +6,16 @@ public class ActionConstants {
 	public static final String ACTION_PREFIX = "/action/";
 	public static final String ACTION_SEP = "/";
 
-	// Action values
+	// Common Actions
 	public static final String ACTION_PROCESS_ACTION_FORM = "process-action-form";
-	
+	public static final String ACTION_PROCESS_CALLBACK = "process-callback";
+
+	// Generic OAuth1 Actions
 	public static final String ACTION_OAUTH1_CALLBACK = "oauth1-callback";
 	public static final String ACTION_OAUTH1_VERIFIER = "oauth1-verifier";
 	public static final String ACTION_OAUTH1_ACCESS_TOKEN = "oauth1-access-token";
-	
-	public static final String ACTION_OAUTH2_CALLBACK = "oauth2-callback";
+
+	// Generic OAuth2 Actions
 	public static final String ACTION_OAUTH2_AUTHORIZATION_CODE = "oauth2-authorization-code";
 	public static final String ACTION_OAUTH2_ACCESS_TOKEN_FROM_AUTHORIZATION_CODE = "oauth2-access-token-from-authorization-code";
 	public static final String ACTION_OAUTH2_ACCESS_TOKEN_FROM_USERNAME_PASSWORD = "oauth2-access-token-from-username-password";

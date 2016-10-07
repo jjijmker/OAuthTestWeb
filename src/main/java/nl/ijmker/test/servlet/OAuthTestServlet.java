@@ -2,7 +2,6 @@ package nl.ijmker.test.servlet;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,19 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.ijmker.test.action.BaseAction;
-import nl.ijmker.test.action.ExternalServerAction;
-import nl.ijmker.test.action.form.ProcessActionFormAction;
-import nl.ijmker.test.action.linkedin.LinkedInActionConstants;
-import nl.ijmker.test.action.linkedin.LinkedInRetrieveProfileJSON;
-import nl.ijmker.test.action.linkedin.LinkedInRetrieveProfileXML;
-import nl.ijmker.test.action.oauth1.OAuth1GetAccessToken;
-import nl.ijmker.test.action.oauth1.OAuth1GetVerifier;
-import nl.ijmker.test.action.oauth2.OAuth2Callback;
-import nl.ijmker.test.action.oauth2.OAuth2GetAccessTokenFromAuthorizationCode;
-import nl.ijmker.test.action.oauth2.OAuth2GetAuthorizationCode;
+import nl.ijmker.test.action.Command;
 import nl.ijmker.test.constant.ActionConstants;
 import nl.ijmker.test.constant.ErrorConstants;
+import nl.ijmker.test.constant.PageConstants;
+import nl.ijmker.test.error.InvalidActionException;
+import nl.ijmker.test.util.CommandUtil;
+import nl.ijmker.test.util.SessionAttrUtil;
 import nl.ijmker.test.util.URLUtil;
 
 /**
@@ -54,77 +47,47 @@ public class OAuthTestServlet extends HttpServlet {
 		// Split in components separated by "/"
 		String[] actionPathComponents = actionPath.split(ActionConstants.ACTION_SEP);
 
-		String serverType = null, serverAction = null;
-		BaseAction serverActionCommand = null;
+		Command command = null;
 
-		if (actionPathComponents.length > 1) {
-			serverType = actionPathComponents[0];
-			serverAction = actionPathComponents[1];
+		LOG.info("actionPath: " + actionPath);
+
+		if (actionPathComponents.length == 3) {
+			// /server/resource/action
+			String server = actionPathComponents[0];
+			String resource = actionPathComponents[1];
+			String action = actionPathComponents[2];
+			command = CommandUtil.getActionCommand(server, resource, action);
+		} else if (actionPathComponents.length == 2) {
+			// /server/action
+			String server = actionPathComponents[0];
+			String action = actionPathComponents[1];
+			command = CommandUtil.getActionCommand(server, action);
+		} else if (actionPathComponents.length == 1) {
+			// /action
+			String action = actionPathComponents[0];
+			command = CommandUtil.getActionCommand(action);
 		} else {
-			serverAction = actionPathComponents[0];
+			throw new InvalidActionException("Action URLs must have between 1 and 3 components");
 		}
 
-		LOG.info("serverAction=" + serverAction + " serverType=" + serverType);
+		// Action Check
+		if (command == null) {
 
-		switch (serverAction) {
-		// Form Handling
-		case ActionConstants.ACTION_PROCESS_ACTION_FORM:
-			serverActionCommand = ProcessActionFormAction.getInstance();
-			break;
-		// OAuth1 Flows
-		case ActionConstants.ACTION_OAUTH1_VERIFIER:
-			serverActionCommand = OAuth1GetVerifier.getInstance();
-			break;
-		case ActionConstants.ACTION_OAUTH1_ACCESS_TOKEN:
-			serverActionCommand = OAuth1GetAccessToken.getInstance();
-			break;
-		// OAuth2 Flows
-		case ActionConstants.ACTION_OAUTH2_AUTHORIZATION_CODE:
-			serverActionCommand = OAuth2GetAuthorizationCode.getInstance();
-			break;
-		case ActionConstants.ACTION_OAUTH2_CALLBACK:
-			serverActionCommand = OAuth2Callback.getInstance();
-			break;
-		case ActionConstants.ACTION_OAUTH2_ACCESS_TOKEN_FROM_AUTHORIZATION_CODE:
-			serverActionCommand = OAuth2GetAccessTokenFromAuthorizationCode.getInstance();
-			break;
-		// Resources Calls
-		case LinkedInActionConstants.ACTION_LINKEDIN_RETRIEVE_XML:
-			serverActionCommand = LinkedInRetrieveProfileXML.getInstance();
-			break;
-		case LinkedInActionConstants.ACTION_LINKEDIN_RETRIEVE_JSON:
-			serverActionCommand = LinkedInRetrieveProfileJSON.getInstance();
-			break;
+			SessionAttrUtil.storeError(request, ErrorConstants.ERROR_UNKNOWN_SERVER);
+			SessionAttrUtil.storeErrorDescription(request, "Could not determine server");
+
+			LOG.error("Could not determine server");
+
+			String errorPageURL = URLUtil.getExternalJSPPath(request, PageConstants.PAGE_ERROR);
+			response.sendRedirect(errorPageURL);
+			return;
 		}
 
-		if (serverActionCommand == null) {
-			// Determine error path
-			String errorJSPPath = URLUtil.getInternalErrorJSPPath(request, ErrorConstants.ERROR_INVALID_ACTION_PATH);
+		LOG.info("command=" + command.getClass().getName() + " (super=" + command.getClass().getSuperclass() + ")");
 
-			// Forward to error page
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher(errorJSPPath);
-			requestDispatcher.forward(request, response);
-		}
-
-		if (serverActionCommand instanceof ExternalServerAction && serverType == null) {
-			// Determine error path
-			String errorJSPPath = URLUtil.getInternalErrorJSPPath(request,
-					ErrorConstants.ERROR_EXTERNAL_SERVER_ACTION_WITHOUT_SERVER_TYPE);
-
-			// Forward to error page
-			RequestDispatcher requestDispatcher = request.getRequestDispatcher(errorJSPPath);
-			requestDispatcher.forward(request, response);
-		}
-
-		LOG.info("serverActionCommand=" + serverActionCommand.getClass().getName() + " (super="
-				+ serverActionCommand.getClass().getSuperclass() + ")");
-
-		if (serverActionCommand instanceof ExternalServerAction) {
-			((ExternalServerAction) serverActionCommand).setServerType(serverType);
-		}
-
+		// Execute command
 		try {
-			serverActionCommand.execute(request, response);
+			command.execute(request, response);
 		} catch (Exception e) {
 			throw new ServletException("Action processing error", e);
 		}
