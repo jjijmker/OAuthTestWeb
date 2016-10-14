@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import nl.ijmker.test.action.Command;
-import nl.ijmker.test.action.GenericCommand;
+import nl.ijmker.test.action.OAuthCommand;
 import nl.ijmker.test.constant.ActionConstants;
 import nl.ijmker.test.constant.PackageConstants;
 import nl.ijmker.test.error.InvalidActionException;
@@ -29,8 +29,7 @@ public class CommandUtil {
 	// Which actions are in the generic package
 	// These actions can be executed against various supporting servers
 	private static final String[] GENERIC_ACTIONS = new String[] { ActionConstants.ACTION_OAUTH1_ACCESS_TOKEN,
-			ActionConstants.ACTION_OAUTH1_CALLBACK, ActionConstants.ACTION_OAUTH1_VERIFIER,
-			ActionConstants.ACTION_OAUTH2_ACCESS_TOKEN_APPLICATION_ONLY,
+			ActionConstants.ACTION_OAUTH1_VERIFIER, ActionConstants.ACTION_OAUTH2_ACCESS_TOKEN_APPLICATION_ONLY,
 			ActionConstants.ACTION_OAUTH2_ACCESS_TOKEN_FROM_AUTHORIZATION_CODE,
 			ActionConstants.ACTION_OAUTH2_ACCESS_TOKEN_FROM_USERNAME_PASSWORD,
 			ActionConstants.ACTION_OAUTH2_ACCESS_TOKEN_IMPLICIT, ActionConstants.ACTION_OAUTH2_AUTHORIZATION_CODE };
@@ -58,14 +57,14 @@ public class CommandUtil {
 
 		return command;
 	}
-	
+
 	/**
 	 * @param server
 	 * @param action
 	 * @return
 	 */
 	public static Command getActionCommand(String server, String action) {
-		
+
 		String fqcn = getFQCN(server, action);
 		Command command = null;
 
@@ -86,11 +85,11 @@ public class CommandUtil {
 
 	/**
 	 * @param server
-	 * @param resource
+	 * @param resourceAction
 	 * @param action
 	 * @return
 	 */
-	public static Command getActionCommand(String server, String resource, String action) {
+	public static Command getActionCommand(String server, String resourceAction, String action) {
 
 		String fqcn = getFQCN(server, action);
 		Command command = null;
@@ -106,10 +105,10 @@ public class CommandUtil {
 			throw new InvalidActionException("Action does not map to command: " + action + " (fqcn: " + fqcn + ")");
 		}
 
-		if (command != null && command instanceof GenericCommand) {
+		if (command != null && command instanceof OAuthCommand) {
 			// Set server and resource in generic command
-			((GenericCommand) command).setServer(server);
-			((GenericCommand) command).setResource(resource);
+			((OAuthCommand) command).setServer(server);
+			((OAuthCommand) command).setResourceAction(resourceAction);
 		}
 
 		return command;
@@ -143,10 +142,8 @@ public class CommandUtil {
 	 */
 	private static String getCommandPackage(String action) {
 
-		if (Arrays.asList(COMMON_ACTIONS).contains(action)) {
-			return PackageConstants.PACKAGE_COMMON_ACTION;
-		} else if (Arrays.asList(GENERIC_ACTIONS).contains(action)) {
-			return PackageConstants.PACKAGE_GENERIC_ACTION;
+		if (Arrays.asList(COMMON_ACTIONS).contains(action) || Arrays.asList(GENERIC_ACTIONS).contains(action)) {
+			return PackageUtil.getDefaultActionPackage();
 		}
 
 		throw new InvalidActionException("Action does not map to common or generic command: " + action);
@@ -158,10 +155,8 @@ public class CommandUtil {
 	 */
 	private static String getCommandPackage(String server, String action) {
 
-		if (Arrays.asList(COMMON_ACTIONS).contains(action)) {
-			return PackageConstants.PACKAGE_COMMON_ACTION;
-		} else if (Arrays.asList(GENERIC_ACTIONS).contains(action)) {
-			return PackageConstants.PACKAGE_GENERIC_ACTION;
+		if (Arrays.asList(COMMON_ACTIONS).contains(action) || Arrays.asList(GENERIC_ACTIONS).contains(action)) {
+			return PackageUtil.getDefaultActionPackage();
 		} else {
 			return PackageUtil.getServerActionPackage(server);
 		}

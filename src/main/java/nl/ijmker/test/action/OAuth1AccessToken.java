@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import com.github.scribejava.core.model.OAuthConstants;
 
-import nl.ijmker.test.action.GenericCommand;
+import nl.ijmker.test.action.OAuthCommand;
 import nl.ijmker.test.util.ParamUtil;
 
-public class OAuth1AccessToken extends GenericCommand {
+public class OAuth1AccessToken extends OAuthCommand {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OAuth1AccessToken.class);
 

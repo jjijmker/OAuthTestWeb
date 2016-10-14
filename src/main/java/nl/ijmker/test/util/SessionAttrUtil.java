@@ -8,6 +8,7 @@ import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 
 import nl.ijmker.test.constant.AttrConstants;
+import nl.ijmker.test.error.model.DisplayError;
 import nl.ijmker.test.linkedin.rs.model.Person;
 
 public class SessionAttrUtil {
@@ -18,74 +19,11 @@ public class SessionAttrUtil {
 
 	/**
 	 * @param request
-	 * @param error
+	 * @param displayError
 	 */
-	public static void storeError(HttpServletRequest request, String error) {
+	public static void storeDisplayError(HttpServletRequest request, DisplayError displayError) {
 
-		store(request, AttrConstants.ATTR_ERROR, error);
-	}
-
-	/**
-	 * @param request
-	 * @param errorDescription
-	 */
-	public static void storeErrorDescription(HttpServletRequest request, String errorDescription) {
-
-		store(request, AttrConstants.ATTR_ERROR_DESCRIPTION, errorDescription);
-	}
-
-	/**
-	 * @param request
-	 * @param errorURI
-	 */
-	public static void storeErrorURI(HttpServletRequest request, String errorURI) {
-
-		store(request, AttrConstants.ATTR_ERROR_URI, errorURI);
-	}
-
-	/**
-	 * @param request
-	 * @return
-	 */
-	public static String getError(HttpServletRequest request) {
-
-		Object error = getRequired(request, AttrConstants.ATTR_ERROR);
-
-		if (error != null) {
-			return (String) error;
-		}
-
-		return null;
-	}
-
-	/**
-	 * @param request
-	 * @return
-	 */
-	public static String getErrorURI(HttpServletRequest request) {
-
-		Object errorURI = getRequired(request, AttrConstants.ATTR_ERROR_URI);
-
-		if (errorURI != null) {
-			return (String) errorURI;
-		}
-
-		return null;
-	}
-
-	/**
-	 * @param request
-	 * @return
-	 */
-	public static String getErrorDescription(HttpServletRequest request) {
-
-		Object errorDescription = getRequired(request, AttrConstants.ATTR_ERROR_DESCRIPTION);
-
-		if (errorDescription != null) {
-			return (String) errorDescription;
-		}
-
-		return null;
+		store(request, AttrConstants.ATTR_DISPLAY_ERROR, displayError);
 	}
 
 	/*
@@ -124,18 +62,18 @@ public class SessionAttrUtil {
 	 * @param request
 	 * @param response
 	 */
-	public static void storeResource(HttpServletRequest request, String resource) {
+	public static void storeResourceAction(HttpServletRequest request, String resourceAction) {
 
-		store(request, AttrConstants.ATTR_RESOURCE, resource);
+		store(request, AttrConstants.ATTR_RESOURCE_ACTION, resourceAction);
 	}
 
 	/**
 	 * @param request
 	 * @return
 	 */
-	public static String getResource(HttpServletRequest request) {
+	public static String getResourceAction(HttpServletRequest request) {
 
-		Object resource = getRequired(request, AttrConstants.ATTR_RESOURCE);
+		Object resource = getRequired(request, AttrConstants.ATTR_RESOURCE_ACTION);
 
 		if (resource != null) {
 			return (String) resource;

@@ -23,8 +23,26 @@ public class ConfigUtil {
 	 * @param servletContext
 	 * @return
 	 */
-	public static String getName(String server) {
+	public static String getServerName(String server) {
 		return DottedProperties.get(server, ConfigConstants.PROP_NAME_NAME);
+	}
+
+	/**
+	 * @param servletContext
+	 * @return
+	 */
+	public static String getResourceActionName(String server, String resourceAction) {
+		return DottedProperties.get(server, ConfigConstants.PROP_KEYWORD_RESOURCE, resourceAction,
+				ConfigConstants.PROP_NAME_NAME);
+	}
+
+	/**
+	 * @param servletContext
+	 * @return
+	 */
+	public static String getSecurityActionName(String securityAction) {
+		return DottedProperties.get(ConfigConstants.PROP_KEYWORD_SECURITY, securityAction,
+				ConfigConstants.PROP_NAME_NAME);
 	}
 
 	/**
@@ -85,17 +103,17 @@ public class ConfigUtil {
 
 	/**
 	 * @param server
-	 * @param resource
+	 * @param resourceAction
 	 * @return
 	 */
-	public static Set<String> getResourceRequiredScope(String server, String resource) {
+	public static Set<String> getResourceRequiredScope(String server, String resourceAction) {
 
 		if (StringUtils.isEmpty(server) || server.equals("empty")) {
 			return null;
 		}
 
 		// Get value
-		String requiredScopes = DottedProperties.get(server, ConfigConstants.PROP_KEYWORD_RESOURCE, resource,
+		String requiredScopes = DottedProperties.get(server, ConfigConstants.PROP_KEYWORD_RESOURCE, resourceAction,
 				ConfigConstants.PROP_NAME_REQUIRED_SCOPES);
 
 		// Convert to Set
@@ -104,31 +122,16 @@ public class ConfigUtil {
 
 	/**
 	 * @param server
-	 * @param resource
+	 * @param resourceAction
 	 * @return
 	 */
-	public static String getResourceName(String server, String resource) {
+	public static String getResourceURL(String server, String resourceAction) {
 
 		if (StringUtils.isEmpty(server) || server.equals("empty")) {
 			return null;
 		}
 
-		return DottedProperties.get(server, ConfigConstants.PROP_KEYWORD_RESOURCE, resource,
-				ConfigConstants.PROP_NAME_NAME);
-	}
-
-	/**
-	 * @param server
-	 * @param resource
-	 * @return
-	 */
-	public static String getResourceURL(String server, String resource) {
-
-		if (StringUtils.isEmpty(server) || server.equals("empty")) {
-			return null;
-		}
-
-		return DottedProperties.get(server, ConfigConstants.PROP_KEYWORD_RESOURCE, resource,
+		return DottedProperties.get(server, ConfigConstants.PROP_KEYWORD_RESOURCE, resourceAction,
 				ConfigConstants.PROP_NAME_URL);
 	}
 
@@ -137,7 +140,11 @@ public class ConfigUtil {
 	 */
 	public static Set<String> getServers() {
 
-		return DottedProperties.list();
+		Set<String> servers = DottedProperties.list();
+
+		servers.remove(ConfigConstants.PROP_KEYWORD_SECURITY);
+
+		return servers;
 	}
 
 	/**
@@ -162,7 +169,7 @@ public class ConfigUtil {
 	/**
 	 * @return
 	 */
-	public static Set<String> getResources(String server) {
+	public static Set<String> getResourceActions(String server) {
 
 		if (StringUtils.isEmpty(server) || server.equals("empty")) {
 			return new HashSet<String>();

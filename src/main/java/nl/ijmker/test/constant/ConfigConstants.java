@@ -19,4 +19,5 @@ public class ConfigConstants {
 	public static final String PROP_NAME_REQUIRED_SCOPES = "required-scopes";
 	
 	public static final String PROP_KEYWORD_RESOURCE = "resource";
+	public static final String PROP_KEYWORD_SECURITY = "security";
 }

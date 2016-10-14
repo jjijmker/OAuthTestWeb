@@ -3,15 +3,21 @@ package nl.ijmker.test.jsphelpers;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
 
+import nl.ijmker.test.constant.ActionConstants;
 import nl.ijmker.test.util.ConfigUtil;
 import nl.ijmker.test.util.SessionAttrUtil;
 import nl.ijmker.test.util.URLUtil;
 
+/**
+ * @author jjijmker
+ *
+ */
 public class StatusPageHelper {
 
 	/**
@@ -38,7 +44,7 @@ public class StatusPageHelper {
 		String server = SessionAttrUtil.getServer(request);
 
 		if (server != null) {
-			return ConfigUtil.getName(server);
+			return ConfigUtil.getServerName(server);
 		} else {
 			return "NA";
 		}
@@ -134,23 +140,63 @@ public class StatusPageHelper {
 	 * @param request
 	 * @return
 	 */
-	public static String getResourceName(HttpServletRequest request) {
+	public static String getSelectedResourceActionName(HttpServletRequest request) {
 
 		String server = SessionAttrUtil.getServer(request);
-		String resource = SessionAttrUtil.getResource(request);
+		String resourceAction = SessionAttrUtil.getResourceAction(request);
 
-		return ConfigUtil.getResourceName(server, resource);
+		return ConfigUtil.getResourceActionName(server, resourceAction);
+	}
+
+	/**
+	 * @param request
+	 * @param resourceAction
+	 * @return
+	 */
+	public static String getResourceActionName(HttpServletRequest request, String resourceAction) {
+
+		String server = SessionAttrUtil.getServer(request);
+
+		return ConfigUtil.getResourceActionName(server, resourceAction);
 	}
 
 	/**
 	 * @param request
 	 * @return
 	 */
-	public static String getResourceURL(HttpServletRequest request) {
+	public static Set<String> getOtherResourceActions(HttpServletRequest request) {
 
 		String server = SessionAttrUtil.getServer(request);
-		String resource = SessionAttrUtil.getResource(request);
+		Set<String> resourceActions = ConfigUtil.getResourceActions(server);
 
-		return URLUtil.getInternalActionPath(request, server, resource);
+		String selectedResourceAction = SessionAttrUtil.getResourceAction(request);
+		resourceActions.remove(selectedResourceAction);
+
+		return resourceActions;
+	}
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	public static String getSelectedResourceActionURL(HttpServletRequest request) {
+
+		String server = SessionAttrUtil.getServer(request);
+		String resourceAction = SessionAttrUtil.getResourceAction(request);
+
+		return URLUtil.getInternalActionPath(request, server, resourceAction);
+	}
+
+	/**
+	 * @param request
+	 * @param resourceAction
+	 * @return
+	 */
+	public static String getResourceActionSwitchURL(HttpServletRequest request, String resourceAction) {
+
+		String server = SessionAttrUtil.getServer(request);
+
+		return URLUtil.getInternalActionPath(request, server, resourceAction,
+				ActionConstants.ACTION_PROCESS_ACTION_SWITCH);
 	}
 }

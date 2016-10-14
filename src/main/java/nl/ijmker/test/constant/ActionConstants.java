@@ -8,6 +8,7 @@ public class ActionConstants {
 
 	// Common Actions
 	public static final String ACTION_PROCESS_ACTION_FORM = "process-action-form";
+	public static final String ACTION_PROCESS_ACTION_SWITCH = "process-action-switch";
 	public static final String ACTION_PROCESS_CALLBACK = "process-callback";
 
 	// Generic OAuth1 Actions

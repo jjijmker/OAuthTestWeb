@@ -1,16 +1,49 @@
 package nl.ijmker.test.google.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
 
-import nl.ijmker.test.action.SpecificCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class GmailProfile extends SpecificCommand {
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import nl.ijmker.test.google.constant.GoogleActionConstants;
+import nl.ijmker.test.google.rs.model.GMailProfileResponse;
+
+public class GmailProfile extends GoogleCommand {
+
+	private static final Logger LOG = LoggerFactory.getLogger(GmailProfile.class);
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see nl.ijmker.test.action.ResourceCommand#getResourceAction()
+	 */
 	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public String getResourceAction() {
+
+		return GoogleActionConstants.ACTION_GMAIL_PROFILE;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * nl.ijmker.test.action.ResourceCommand#getResponseObject(javax.ws.rs.core.
+	 * Response)
+	 */
+	@Override
+	public Object getResponseObject(Response response) throws Exception {
+
+		String body = response.readEntity(String.class);
+		ObjectMapper mapper = new ObjectMapper();
+		GMailProfileResponse serviceResponse = mapper.readValue(body, GMailProfileResponse.class);
+
+		LOG.info("Email Address: " + serviceResponse.getEmailAddress());
+		LOG.info("Messages Total: " + serviceResponse.getMessagesTotal());
+		LOG.info("Threads Total: " + serviceResponse.getThreadsTotal());
+		LOG.info("History ID: " + serviceResponse.getHistoryId());
+
+		return serviceResponse;
+	}
 }

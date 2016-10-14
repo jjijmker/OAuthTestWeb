@@ -7,10 +7,10 @@ package nl.ijmker.test.action;
  *         what action that server is expected to execute with the results.
  *
  */
-public abstract class GenericCommand extends SpecificCommand {
+public abstract class OAuthCommand extends BaseCommand {
 
 	private String server;
-	private String resource;
+	private String resourceAction;
 
 	public String getServer() {
 		return server;
@@ -20,11 +20,11 @@ public abstract class GenericCommand extends SpecificCommand {
 		this.server = server;
 	}
 
-	public String getResource() {
-		return resource;
+	public String getResourceAction() {
+		return resourceAction;
 	}
 
-	public void setResource(String resource) {
-		this.resource = resource;
+	public void setResourceAction(String resourceAction) {
+		this.resourceAction = resourceAction;
 	}
 }

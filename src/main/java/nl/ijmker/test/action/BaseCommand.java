@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author Jan IJmker
  * 
- *         This command is specific to a certain server and action.
+ *         This command is common to all servers and actions.
  *
  */
-public abstract class SpecificCommand implements Command {
+public abstract class BaseCommand implements Command {
 
 	@Override
 	public abstract void execute(HttpServletRequest request, HttpServletResponse response) throws Exception;

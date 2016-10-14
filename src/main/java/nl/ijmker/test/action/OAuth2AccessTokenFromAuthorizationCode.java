@@ -6,12 +6,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.scribejava.apis.google.GoogleToken;
 import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.model.OAuthConstants;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
-import nl.ijmker.test.action.GenericCommand;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import nl.ijmker.test.constant.PageConstants;
 import nl.ijmker.test.scribejava.api.ResourceServerAPI20;
 import nl.ijmker.test.util.CSRFUtil;
@@ -20,7 +21,7 @@ import nl.ijmker.test.util.ParamUtil;
 import nl.ijmker.test.util.SessionAttrUtil;
 import nl.ijmker.test.util.URLUtil;
 
-public class OAuth2AccessTokenFromAuthorizationCode extends GenericCommand {
+public class OAuth2AccessTokenFromAuthorizationCode extends OAuthCommand {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OAuth2AccessTokenFromAuthorizationCode.class);
 
@@ -64,9 +65,13 @@ public class OAuth2AccessTokenFromAuthorizationCode extends GenericCommand {
 		OAuth20Service service = new ServiceBuilder().apiKey(clientKey).apiSecret(clientSecret).callback(callbackURL)
 				.state(newCSRFToken).build(selectedAPI);
 
-		OAuth2AccessToken accessToken = service.getAccessToken(authorizationCode);
+		GoogleToken accessToken = (GoogleToken) service.getAccessToken(authorizationCode);
 
 		LOG.info("accessToken=" + accessToken);
+		
+		Claims JWTBody = Jwts.parser().parseClaimsJws(accessToken.getOpenIdToken()).getBody();
+		
+		LOG.info("subject=" + JWTBody.getSubject()); 
 
 		SessionAttrUtil.storeOAuth2AccessToken(request, accessToken);
 		SessionAttrUtil.storeServer(request, getServer());

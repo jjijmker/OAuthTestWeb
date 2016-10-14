@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.ijmker.test.action.CommonCommand;
+import nl.ijmker.test.action.BaseCommand;
 import nl.ijmker.test.constant.ParamConstants;
 import nl.ijmker.test.util.ParamUtil;
 import nl.ijmker.test.util.URLUtil;
 
-public class ProcessActionForm extends CommonCommand {
+public class ProcessActionForm extends BaseCommand {
 
 	@SuppressWarnings("unused")
 	private static final Logger LOG = LoggerFactory.getLogger(ProcessActionForm.class);
@@ -50,11 +50,11 @@ public class ProcessActionForm extends CommonCommand {
 
 			// Read parameters
 			String server = ParamUtil.getRequired(request, ParamConstants.PARAM_SERVER);
-			String resource = ParamUtil.getRequired(request, ParamConstants.PARAM_RESOURCE);
+			String resourceAction = ParamUtil.getRequired(request, ParamConstants.PARAM_RESOURCE_ACTION);
 			String securityAction = ParamUtil.getRequired(request, ParamConstants.PARAM_SECURITY_ACTION);
 
 			// Determine action path
-			String actionPath = URLUtil.getInternalActionPath(request, server, resource, securityAction);
+			String actionPath = URLUtil.getInternalActionPath(request, server, resourceAction, securityAction);
 
 			// Forward to action
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(actionPath);

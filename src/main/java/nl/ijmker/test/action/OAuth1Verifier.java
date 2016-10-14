@@ -6,9 +6,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import nl.ijmker.test.action.GenericCommand;
+import nl.ijmker.test.action.OAuthCommand;
 
-public class OAuth1Verifier extends GenericCommand {
+public class OAuth1Verifier extends OAuthCommand {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OAuth1Verifier.class);
 

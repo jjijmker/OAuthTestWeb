@@ -1,10 +1,18 @@
 package nl.ijmker.test.scribejava.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.github.scribejava.apis.google.GoogleJsonTokenExtractor;
 import com.github.scribejava.core.builder.api.DefaultApi20;
+import com.github.scribejava.core.extractors.TokenExtractor;
+import com.github.scribejava.core.model.OAuth2AccessToken;
 
 import nl.ijmker.test.util.ConfigUtil;
 
 public class ResourceServerAPI20 extends DefaultApi20 {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(ResourceServerAPI20.class);
 
 	private String resourceServer;
 
@@ -51,4 +59,14 @@ public class ResourceServerAPI20 extends DefaultApi20 {
 		this.resourceServer = resourceServer;
 	}
 
+    /* (non-Javadoc)
+     * @see com.github.scribejava.core.builder.api.DefaultApi20#getAccessTokenExtractor()
+     */
+    @Override
+    public TokenExtractor<OAuth2AccessToken> getAccessTokenExtractor() {
+    	
+    	LOG.info("JANNEMAN2");
+    	
+        return GoogleJsonTokenExtractor.instance();
+    }
 }

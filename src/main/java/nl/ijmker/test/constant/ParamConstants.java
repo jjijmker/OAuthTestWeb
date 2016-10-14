@@ -5,7 +5,7 @@ public class ParamConstants {
 	// Internal
 	public static final String PARAM_EXECUTE_ACTION = "executeAction";
 	public static final String PARAM_SERVER = "server";
-	public static final String PARAM_RESOURCE = "resource";
+	public static final String PARAM_RESOURCE_ACTION = "resourceAction";
 	public static final String PARAM_SECURITY_ACTION = "securityAction";
 
 	// OAuth2

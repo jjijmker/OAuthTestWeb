@@ -80,7 +80,7 @@ public class DottedProperties extends Properties {
 		for (Object keyObject : getConfigProperties().keySet()) {
 
 			String key = keyObject.toString();
-			
+
 			if (key.startsWith(filterKey)) {
 
 				String[] keyComponents = key.split("\\.");

@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import nl.ijmker.test.action.Command;
 import nl.ijmker.test.constant.ActionConstants;
-import nl.ijmker.test.constant.ErrorConstants;
 import nl.ijmker.test.constant.PageConstants;
 import nl.ijmker.test.error.InvalidActionException;
 import nl.ijmker.test.util.CommandUtil;
+import nl.ijmker.test.util.DisplayErrorUtil;
 import nl.ijmker.test.util.SessionAttrUtil;
 import nl.ijmker.test.util.URLUtil;
 
@@ -54,9 +54,9 @@ public class OAuthTestServlet extends HttpServlet {
 		if (actionPathComponents.length == 3) {
 			// /server/resource/action
 			String server = actionPathComponents[0];
-			String resource = actionPathComponents[1];
+			String resourceAction = actionPathComponents[1];
 			String action = actionPathComponents[2];
-			command = CommandUtil.getActionCommand(server, resource, action);
+			command = CommandUtil.getActionCommand(server, resourceAction, action);
 		} else if (actionPathComponents.length == 2) {
 			// /server/action
 			String server = actionPathComponents[0];
@@ -70,14 +70,10 @@ public class OAuthTestServlet extends HttpServlet {
 			throw new InvalidActionException("Action URLs must have between 1 and 3 components");
 		}
 
-		// Action Check
+		// Check
 		if (command == null) {
-
-			SessionAttrUtil.storeError(request, ErrorConstants.ERROR_UNKNOWN_SERVER);
-			SessionAttrUtil.storeErrorDescription(request, "Could not determine server");
-
-			LOG.error("Could not determine server");
-
+			// Create display error
+			SessionAttrUtil.storeDisplayError(request, DisplayErrorUtil.reportCommandFailure(request));
 			String errorPageURL = URLUtil.getExternalJSPPath(request, PageConstants.PAGE_ERROR);
 			response.sendRedirect(errorPageURL);
 			return;

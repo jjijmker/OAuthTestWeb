@@ -90,14 +90,14 @@ public class URLUtil {
 	/**
 	 * @param request
 	 * @param server
-	 * @param resource
+	 * @param resourceAction
 	 * @param action
 	 * @return
 	 */
-	public static String getInternalActionPath(HttpServletRequest request, String server, String resource,
+	public static String getInternalActionPath(HttpServletRequest request, String server, String resourceAction,
 			String action) {
 
-		return ActionConstants.ACTION_PREFIX + server + ActionConstants.ACTION_SEP + resource
+		return ActionConstants.ACTION_PREFIX + server + ActionConstants.ACTION_SEP + resourceAction
 				+ ActionConstants.ACTION_SEP + action;
 	}
 

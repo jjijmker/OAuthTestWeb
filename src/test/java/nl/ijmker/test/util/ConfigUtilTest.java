@@ -26,13 +26,13 @@ public class ConfigUtilTest {
 	@Test
 	public void testGetNameGoogle() {
 
-		assertEquals("Google", ConfigUtil.getName(ServerConstants.SERVER_GOOGLE));
+		assertEquals("Google", ConfigUtil.getServerName(ServerConstants.SERVER_GOOGLE));
 	}
 
 	@Test
 	public void testGetNameLinkedIn() {
 
-		assertEquals("LinkedIn", ConfigUtil.getName(ServerConstants.SERVER_LINKEDIN));
+		assertEquals("LinkedIn", ConfigUtil.getServerName(ServerConstants.SERVER_LINKEDIN));
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class ConfigUtilTest {
 	@Test
 	public void testGetResourcesGoogles() {
 
-		Set<String> googleResources = ConfigUtil.getResources(ServerConstants.SERVER_GOOGLE);
+		Set<String> googleResources = ConfigUtil.getResourceActions(ServerConstants.SERVER_GOOGLE);
 
 		assertEquals(1, googleResources.size());
 		assertTrue(googleResources.contains("gmail-profile"));
@@ -57,7 +57,7 @@ public class ConfigUtilTest {
 	@Test
 	public void testGetResourcesLinkedIn() {
 
-		Set<String> linkedInResources = ConfigUtil.getResources(ServerConstants.SERVER_LINKEDIN);
+		Set<String> linkedInResources = ConfigUtil.getResourceActions(ServerConstants.SERVER_LINKEDIN);
 
 		assertEquals(2, linkedInResources.size());
 		assertTrue(linkedInResources.contains("profile-xml"));
@@ -73,11 +73,12 @@ public class ConfigUtilTest {
 		assertEquals(1, googleGmailProfileRequiredScopes.size());
 		assertTrue(googleGmailProfileRequiredScopes.contains("profile"));
 	}
-	
+
 	@Test
 	public void testGetResourceRequiredScopeLinkedIn() {
 
-		Set<String> linkedInProfile = ConfigUtil.getResourceRequiredScope(ServerConstants.SERVER_LINKEDIN, "profile-xml");
+		Set<String> linkedInProfile = ConfigUtil.getResourceRequiredScope(ServerConstants.SERVER_LINKEDIN,
+				"profile-xml");
 
 		assertEquals(2, linkedInProfile.size());
 		assertTrue(linkedInProfile.contains("r_basicprofile"));

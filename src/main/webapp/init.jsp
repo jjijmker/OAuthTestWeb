@@ -6,6 +6,7 @@
 <%@ page import="nl.ijmker.test.constant.AttrConstants" %>
 <%@ page import="nl.ijmker.test.constant.ErrorConstants" %>
 
-<!-- Utils -->
+<!-- Util -->
 <%@ page import="nl.ijmker.test.util.URLUtil" %>
 <%@ page import="nl.ijmker.test.util.ConfigUtil" %>
+<%@ page import="nl.ijmker.test.util.FormattingUtil" %>

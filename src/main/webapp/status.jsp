@@ -82,12 +82,29 @@
 <table>
 	<tr>
 		<th>
-			Action
+			Selected Action
 		</th>
 		<td>
-			<a href="<c:out value="${StatusPageHelper.getResourceURL(pageContext.request)}" />">
-				<c:out value="${StatusPageHelper.getResourceName(pageContext.request)}" />
+			<a href="<c:out value="${StatusPageHelper.getSelectedResourceActionURL(pageContext.request)}" />">
+				<c:out value="${StatusPageHelper.getSelectedResourceActionName(pageContext.request)}" />
 			</a>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<th>
+			Other Actions for <c:out value="${StatusPageHelper.getServerName(pageContext.request)}" />
+		</th>
+		<td>
+			<ul>
+				<c:forEach var="resourceAction" items="${StatusPageHelper.getOtherResourceActions(pageContext.request)}">
+					<a href="${StatusPageHelper.getResourceActionSwitchURL(pageContext.request, resourceAction)}">
+						<c:out value="${ConfigUtil.getResourceActionName(param.server, resourceAction)}"/>
+					</a>
+				</c:forEach>
+			</ul>
 		</td>
 	</tr>
 </table>
